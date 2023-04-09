@@ -1,0 +1,48 @@
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <title>
+        Vedat Milor API Servisi
+    </title>
+    <style>
+        * {
+            font-family: sans-serif;
+        }
+
+        .container {
+            width: max-content;
+            margin-top: 5em;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: left;
+        }
+
+        .container * {
+            margin: 0;
+        }
+
+        .container h1, .desc {
+            margin-bottom: 1em;
+        }
+
+        code {
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>
+        Vedat Milor API Servisi
+    </h1>
+    <p class="desc">
+        <b>GET</b> isteği ile <b>/sehir/&lt;string:sehir&gt;</b> adresine istek atarak <b>JSON</b> formatında veri
+        alabilirsiniz:
+    <p>
+        <code style="margin-left: 2em">
+            GET https://vedatmilor-api.vercel.app/sehir/konya
+        </code>
+    </p>
+</div>
+</body>
+</html>
