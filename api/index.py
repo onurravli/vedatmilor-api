@@ -1,8 +1,10 @@
 from flask import Flask, jsonify, render_template
+from flask_caching import Cache
 import requests
 from bs4 import BeautifulSoup
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
+cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 app.config["JSON_SORT_KEYS"] = False
 
 
@@ -25,6 +27,7 @@ def home():
 
 
 @app.route('/sehir/<string:sehir>')
+@cache.cached(timeout=3600, key_prefix='shop_list')
 def sehir(sehir: str):
     # html_content = requests.get(f"https://rehber.vedatmilor.com/loc/{sehir}").text
     html_content = requests.get(f"https://rehber.vedatmilor.com/loc/{sehir}/?=&count=40&orderby=date&order=DESC").text
@@ -34,9 +37,11 @@ def sehir(sehir: str):
     for s in shops:
         name = s.find("h3").text
         url = s.find("a").get("href")
-        html_content_shop = requests.get(url).text
-        soup_shop = BeautifulSoup(html_content_shop, "html.parser")
-        desc = soup_shop.find("div", attrs={"class": "entry-content"}).find("p").text
-        # img = soup_shop.find("div", attrs={"class": "page-title has-bg"})
+        desc = cache.get(url)
+        if desc is None:
+            html_content_shop = requests.get(url).text
+            soup_shop = BeautifulSoup(html_content_shop, "html.parser")
+            desc = soup_shop.find("div", attrs={"class": "entry-content"}).find("p").text
+            cache.set(url, desc)
         shop_list.append(Shop(name, url, desc, None))
     return jsonify([ob.__dict__ for ob in shop_list])
