@@ -27,7 +27,7 @@ def home():
 @app.route('/sehir/<string:sehir>')
 def sehir(sehir: str):
     # html_content = requests.get(f"https://rehber.vedatmilor.com/loc/{sehir}").text
-    html_content = requests.get(f"https://rehber.vedatmilor.com/loc/{sehir}/?=&count=20&orderby=date&order=DESC").text
+    html_content = requests.get(f"https://rehber.vedatmilor.com/loc/{sehir}/?=&count=40&orderby=date&order=DESC").text
     soup = BeautifulSoup(html_content, "html.parser")
     shops = soup.find_all("div", attrs={"class": "item-title"})
     shop_list = []
